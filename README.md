@@ -1,5 +1,5 @@
 # CAPTURE-GAN
-Personal pytorch implementation of the 2024 MICCAI paper: CAPTURE-GAN: Conditional Attribute Preservation through Unveiling Realistic GAN for artifact removal in dual-energy CT imaging
+Personal pytorch implementation of the 2024 MICCAI paper: "CAPTURE-GAN: Conditional Attribute Preservation through Unveiling Realistic GAN for artifact removal in dual-energy CT imaging."
 We authors will upload all source code after acceptance.
 
 ## Abstract
