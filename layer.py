@@ -67,6 +67,40 @@ class CBR2d(nn.Module):  # CBR : Conv + BN + Relu
         return self.cbr(x)
 
 
+class BRC2d(nn.Module):  # CBR : Conv + BN + Relu
+    def __init__(self, input_nc, output_nc, kernel_size=3, stride=1, padding=1, padding_mode='reflection', bias=True, norm="bnorm", relu=0.0, dilation=1):
+        super().__init__()
+
+        layers = []
+
+        if not norm is None:
+            if norm == "bnorm":
+                layers += [nn.BatchNorm2d(num_features=input_nc)]
+            elif norm == "inorm":
+                layers += [nn.InstanceNorm2d(num_features=input_nc)]
+
+        if not relu is None and relu >= 0.0:
+            layers += [nn.ReLU() if relu == 0 else nn.LeakyReLU(relu)]
+
+        if padding_mode == 'reflection':
+            layers += [nn.ReflectionPad2d(padding)]
+        elif padding_mode == 'replication':
+            layers += [nn.ReplicationPad2d(padding)]
+        elif padding_mode == 'constant':
+            value = 0
+            layers += [nn.ConstantPad2d(padding, value)]
+        elif padding_mode == 'zeros':
+            layers += [nn.ZeroPad2d(padding)]
+
+        layers += [nn.Conv2d(in_channels=input_nc, out_channels=output_nc,
+                             kernel_size=kernel_size, stride=stride, padding=0, dilation=dilation,
+                             bias=bias)]
+
+        self.brc = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.brc(x)
+
 class ResBlock(nn.Module):
     def __init__(self, input_nc, output_nc, kernel_size=3, stride=1, padding=1, bias=True, norm="bnorm", relu=0.0):
         super().__init__()
